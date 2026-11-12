@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emad Alnabelsi — Graphic & Multimedia Designer</title>
+<meta name="description" content="Portfolio of Emad Alnabelsi: motion graphics, video editing, branding, social media and print design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;800;900&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a camera viewfinder — dark stage, neon rim light, timecode chrome, scroll = timeline scrub */
+:root{
+  --ink:#0A0910; --ink-2:#14121C; --line:#2A2636;
+  --paper:#F3F0F8; --mute:#9C96AE;
+  --glow-a:#FF2E88; --glow-b:#2DE2E6;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --gutter:clamp(16px,4vw,56px);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--ink)}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--f-body);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--glow-b);outline-offset:4px}
+.wrap{padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+
+/* grain */
+.grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:90;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-5%,3%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-3%,5%)}80%{transform:translate(6%,2%)}100%{transform:translate(0,0)}}
+
+/* cursor */
+.cursor{position:fixed;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--paper);mix-blend-mode:difference;pointer-events:none;z-index:200;transition:width .35s cubic-bezier(.2,.8,.2,1),height .35s,margin .35s;display:grid;place-items:center}
+.cursor span{font:600 11px/1 var(--f-mono);letter-spacing:.1em;color:var(--ink);opacity:0;transition:opacity .2s}
+.cursor.big{width:96px;height:96px;margin:-48px 0 0 -48px;mix-blend-mode:normal;background:var(--glow-a)}
+.cursor.big span{opacity:1;color:var(--paper)}
+@media (hover:none),(pointer:coarse){.cursor{display:none}}
+
+/* preloader */
+.loader{position:fixed;inset:0;z-index:300;background:var(--ink);display:grid;place-items:center}
+.loader__count{font:900 clamp(80px,20vw,260px)/1 var(--f-display);letter-spacing:-.04em;font-variant-numeric:tabular-nums;
+  background:linear-gradient(90deg,var(--glow-a),var(--glow-b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.loader__meta{position:absolute;left:var(--gutter);right:var(--gutter);bottom:calc(32px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;color:var(--mute)}
+.loader__bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:linear-gradient(90deg,var(--glow-a),var(--glow-b))}
+
+/* top chrome */
+.chrome{position:fixed;left:0;right:0;top:0;z-index:100;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:18px;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
+.chrome a.logo{font:800 15px/1 var(--f-display);letter-spacing:.02em}
+.chrome nav{display:flex;gap:clamp(14px,3vw,36px)}
+.chrome nav a{position:relative;overflow:hidden;display:inline-block;height:1.3em}
+.chrome nav a span{display:block;transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.chrome nav a span+span{position:absolute;left:0;top:100%}
+.chrome nav a:hover span{transform:translateY(-100%)}
+.rec{display:flex;align-items:center;gap:8px}
+.rec i{width:8px;height:8px;border-radius:50%;background:var(--glow-a);box-shadow:0 0 12px var(--glow-a);animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+@media (max-width:640px){.rec{display:none}.vf .iso{display:none}.vf .tc{right:36px}}
+
+/* hero */
+.hero{position:relative;min-height:100svh;display:grid;grid-template-columns:1.15fr .85fr;align-items:end;gap:clamp(24px,4vw,64px);padding-top:calc(110px + env(safe-area-inset-top,0px));padding-bottom:clamp(40px,7vh,80px);isolation:isolate}
+.hero__glow{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.hero__glow b{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(90px);opacity:.38}
+.hero__glow b:nth-child(1){background:var(--glow-a);left:-15vmax;top:-20vmax}
+.hero__glow b:nth-child(2){background:var(--glow-b);right:-20vmax;bottom:-25vmax;opacity:.28}
+.vf{position:absolute;inset:calc(84px + env(safe-area-inset-top,0px)) var(--gutter) 24px;pointer-events:none;z-index:-1}
+.vf i{position:absolute;width:28px;height:28px;border:1.5px solid rgba(243,240,248,.45)}
+.vf i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.vf i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.vf i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.vf i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.vf .tc{position:absolute;right:40px;top:6px;color:var(--mute);font-variant-numeric:tabular-nums}
+.vf .iso{position:absolute;left:40px;top:6px;color:var(--mute)}
+.hero__eyebrow{color:var(--glow-b);margin-bottom:20px;display:flex;gap:12px;align-items:center}
+.hero__eyebrow::before{content:"";width:36px;height:1px;background:currentColor}
+.hero h1{margin:0;font:900 clamp(34px,6.3vw,140px)/.9 var(--f-display);letter-spacing:-.045em;text-transform:uppercase}
+.hero h1 .line{display:block;white-space:nowrap;overflow:hidden;padding-bottom:.04em}
+.hero h1 .char{display:inline-block;will-change:transform}
+.hero h1 .outline .char{background:linear-gradient(90deg,var(--glow-a),var(--glow-b));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:900% 100%}
+.hero__lead{max-width:44ch;margin:28px 0 0;color:var(--mute);font-size:clamp(15px,1.3vw,18px)}
+.hero__lead strong{color:var(--paper);font-weight:700}
+.hero__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 26px;border-radius:999px;border:1px solid var(--line);font-weight:700;overflow:hidden;isolation:isolate;transition:color .4s,border-color .4s}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--glow-a),var(--glow-b));transform:translateY(101%);transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.btn:hover::before{transform:none}
+.btn:hover{border-color:transparent;color:var(--ink)}
+.btn--solid{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.portrait{position:relative;justify-self:end;width:min(100%,460px);aspect-ratio:4/5;border-radius:220px 220px 18px 18px;overflow:hidden;transform-style:preserve-3d;will-change:transform}
+.portrait img{width:100%;height:120%;object-fit:cover;object-position:60% 18%;filter:grayscale(.15) contrast(1.05)}
+.portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,9,16,.85)),linear-gradient(120deg,rgba(255,46,136,.28),transparent 40%,rgba(45,226,230,.22));mix-blend-mode:screen;pointer-events:none}
+.portrait__tag{position:absolute;left:18px;bottom:18px;z-index:2;display:flex;gap:8px;align-items:center}
+.portrait__tag i{width:8px;height:8px;border-radius:50%;background:#3dff8b;box-shadow:0 0 10px #3dff8b}
+.scroll-hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-hint b{width:1px;height:46px;background:linear-gradient(var(--paper),transparent);animation:drip 1.8s cubic-bezier(.7,0,.2,1) infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+@media (max-width:860px){
+  .hero h1{font-size:clamp(30px,11.5vw,96px)}
+  .hero{grid-template-columns:1fr;align-items:start}
+  .portrait{justify-self:start;width:min(78%,360px);order:-1}
+  .scroll-hint{display:none}
+}
+
+/* marquee */
+.marquee{border-block:1px solid var(--line);padding-block:22px;overflow:hidden;white-space:nowrap;position:relative}
+.marquee__track{display:inline-flex;gap:48px;will-change:transform}
+.marquee__track span{font:800 clamp(28px,5vw,64px)/1 var(--f-display);text-transform:uppercase;letter-spacing:-.02em;display:inline-flex;align-items:center;gap:48px}
+.marquee__track span:nth-child(even){color:var(--line)}
+.marquee__track span::after{content:"✦";font-size:.5em;color:var(--glow-a)}
+
+/* section heads */
+.sec{padding-block:clamp(80px,12vw,160px)}
+.sec__head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,64px)}
+.sec__head h2{margin:0;font:900 clamp(40px,8vw,120px)/.9 var(--f-display);letter-spacing:-.04em;text-transform:uppercase;text-wrap:balance}
+.sec__head h2 em{font-style:normal;background:linear-gradient(90deg,var(--glow-a),var(--glow-b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sec__head p{margin:0;max-width:34ch;color:var(--mute)}
+
+/* work: horizontal reel */
+.reel{position:relative;overflow:hidden}
+.reel__track{display:flex;gap:clamp(18px,2.4vw,36px);width:max-content;padding-left:max(var(--gutter),env(safe-area-inset-left,0px));padding-right:max(var(--gutter),env(safe-area-inset-right,0px));will-change:transform}
+.card{position:relative;width:clamp(300px,42vw,640px);flex:none;cursor:pointer;text-align:left}
+.card__media{position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--ink-2);isolation:isolate}
+.card__media img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform 1.1s cubic-bezier(.2,.8,.2,1),filter .6s}
+.card:hover .card__media img{transform:scale(1.0);filter:saturate(1.2)}
+.card__media::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:box-shadow .5s}
+.card:hover .card__media::after{box-shadow:inset 0 0 0 1px var(--glow-a),0 0 0 0 transparent}
+.card__glow{position:absolute;inset:-2px;border-radius:16px;z-index:-1;background:linear-gradient(120deg,var(--glow-a),var(--glow-b));filter:blur(24px);opacity:0;transition:opacity .6s}
+.card:hover .card__glow{opacity:.55}
+.card__badge{position:absolute;left:14px;top:14px;z-index:2;padding:6px 10px;border-radius:999px;background:rgba(10,9,16,.7);backdrop-filter:blur(8px);display:flex;gap:8px;align-items:center}
+.card__badge i{width:6px;height:6px;border-radius:50%;background:var(--glow-a)}
+.card__meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:18px}
+.card__meta h3{margin:0;font:800 clamp(20px,2vw,30px)/1.1 var(--f-display);letter-spacing:-.02em}
+.card__meta .mono{color:var(--mute);white-space:nowrap}
+.card__cat{color:var(--glow-b);margin-top:6px}
+.card__num{position:absolute;right:16px;bottom:10px;z-index:2;font:900 clamp(60px,8vw,120px)/1 var(--f-display);color:rgba(243,240,248,.18);letter-spacing:-.05em}
+.reel__progress{margin-top:40px;height:2px;background:var(--line);position:relative}
+.reel__progress b{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--glow-a),var(--glow-b))}
+/* fake video cover */
+.vidcover{position:absolute;inset:0;display:grid;place-items:center;background:
+  radial-gradient(60% 80% at 30% 30%,rgba(255,46,136,.55),transparent 60%),
+  radial-gradient(60% 80% at 75% 70%,rgba(45,226,230,.45),transparent 60%),#0f0d16;animation:hue 8s linear infinite}
+@keyframes hue{to{filter:hue-rotate(360deg)}}
+.vidcover .play{width:84px;height:84px;border-radius:50%;border:1.5px solid var(--paper);display:grid;place-items:center;backdrop-filter:blur(6px)}
+.vidcover .play::before{content:"";border-left:22px solid var(--paper);border-top:14px solid transparent;border-bottom:14px solid transparent;margin-left:6px}
+.vidcover .strip{position:absolute;left:0;right:0;height:18px;background:repeating-linear-gradient(90deg,transparent 0 14px,rgba(0,0,0,.6) 14px 26px);opacity:.6}
+.vidcover .strip.t{top:10px}.vidcover .strip.b{bottom:10px}
+.vidcover .label{position:absolute;bottom:40px;font:900 clamp(26px,3.4vw,46px)/1 var(--f-display);text-transform:uppercase;letter-spacing:-.03em}
+@media (max-width:860px){
+  .reel__track{flex-direction:column;width:auto}
+  .card{width:100%}
+  .reel__progress{display:none}
+}
+
+/* about */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:start}
+.about__big{margin:0;font:500 clamp(24px,3.2vw,46px)/1.22 var(--f-display);letter-spacing:-.02em;text-wrap:balance}
+.about__big .w{opacity:.16;transition:opacity .2s}
+.about__big .w.on{opacity:1}
+.tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tool{position:relative;padding:22px;border:1px solid var(--line);border-radius:14px;background:var(--ink-2);overflow:hidden;transition:border-color .4s,transform .4s}
+.tool:hover{border-color:var(--tc);transform:translateY(-4px)}
+.tool__ic{width:52px;height:52px;border-radius:10px;display:grid;place-items:center;font:700 22px/1 var(--f-body);color:var(--tc);background:var(--tb);border:2px solid var(--tc);margin-bottom:16px}
+.tool h4{margin:0 0 4px;font:700 16px/1.2 var(--f-body)}
+.tool p{margin:0;color:var(--mute);font-size:14px;line-height:1.5}
+.tool__lvl{margin-top:14px;height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+.tool__lvl b{display:block;height:100%;width:var(--lv);background:var(--tc);transform-origin:left;transform:scaleX(0);transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.tool.in .tool__lvl b{transform:scaleX(1)}
+.toolset{display:flex;flex-direction:column;gap:14px;min-width:0}
+.tools__label{color:var(--mute)}
+.tools__label:not(:first-child){margin-top:18px}
+.tools--ai{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tools--ai .tool{padding:18px}
+.tools--ai .tool__ic{width:44px;height:44px;font-size:20px;margin-bottom:12px}
+.tool__ic--figma{display:grid;grid-template-columns:repeat(2,9px);grid-auto-rows:9px;gap:1px;place-content:center;border-color:var(--line)!important}
+.tool__ic--figma i{display:block;width:9px;height:9px;border-radius:50%}
+.tool__ic--figma i:nth-child(1){background:#F24E1E;border-radius:50% 0 0 50%}
+.tool__ic--figma i:nth-child(2){background:#FF7262;border-radius:0 50% 50% 0}
+.tool__ic--figma i:nth-child(3){background:#A259FF;border-radius:50% 0 0 50%}
+.tool__ic--figma i:nth-child(4){background:#1ABCFE}
+.tool__ic--figma i:nth-child(5){background:#0ACF83;border-radius:50% 0 50% 50%}
+@media (max-width:560px){.tools--ai{grid-template-columns:1fr}}
+.services{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
+.services span{padding:10px 16px;border:1px solid var(--line);border-radius:999px;font-weight:500;font-size:14px}
+@media (max-width:860px){.about{grid-template-columns:1fr}}
+@media (max-width:420px){.tools{grid-template-columns:1fr}}
+
+/* contact */
+.contact{position:relative;text-align:center;overflow:hidden;isolation:isolate}
+.contact .mono{color:var(--glow-b)}
+.contact__big{display:block;margin:24px 0 40px;font:900 clamp(48px,13vw,220px)/.85 var(--f-display);letter-spacing:-.05em;text-transform:uppercase}
+.contact__big span{display:block}
+.contact__big span:last-child{background:linear-gradient(90deg,var(--glow-a),var(--glow-b));-webkit-background-clip:text;background-clip:text;color:transparent;transition:filter .5s}
+.contact__big:hover span:last-child{filter:drop-shadow(0 0 40px rgba(255,46,136,.6))}
+.mail{display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;padding:10px 10px 10px 24px;border:1px solid var(--line);border-radius:999px;font:500 clamp(15px,2vw,22px)/1.2 var(--f-body);max-width:100%}
+.mail a{word-break:break-all}
+.mail--phone{margin-top:12px}
+.mail .wa{padding:12px 18px;border-radius:999px;border:1px solid var(--line);font-weight:700;font-size:14px;word-break:normal}
+.mail .wa:hover{border-color:#25D366;color:#25D366}
+.contact .mail+.mail{display:flex;width:fit-content;margin-inline:auto}
+.mail button{padding:12px 18px;border-radius:999px;background:var(--paper);color:var(--ink);font-weight:700;font-size:14px}
+.socials{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:28px}
+footer{border-top:1px solid var(--line);padding-block:24px calc(24px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--mute)}
+
+/* project overlay */
+.proj{position:fixed;inset:0;z-index:150;background:var(--ink);overflow-y:auto;overscroll-behavior:contain;visibility:hidden;clip-path:inset(100% 0 0 0)}
+.proj__bar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:16px;background:linear-gradient(var(--ink) 60%,transparent)}
+.proj__close{display:flex;align-items:center;gap:10px;padding:10px 18px;border:1px solid var(--line);border-radius:999px}
+.proj__close:hover{border-color:var(--glow-a)}
+.proj__hero{padding-block:clamp(40px,8vw,100px) clamp(30px,5vw,60px)}
+.proj__hero h2{margin:12px 0 0;font:900 clamp(40px,9vw,140px)/.88 var(--f-display);letter-spacing:-.045em;text-transform:uppercase;text-wrap:balance}
+.proj__hero p{max-width:60ch;color:var(--mute);margin:24px 0 0}
+.proj__stats{display:flex;gap:32px;flex-wrap:wrap;margin-top:28px}
+.proj__stats div{display:flex;flex-direction:column;gap:4px}
+.proj__stats b{font:800 28px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.proj__stats .mono{color:var(--mute)}
+.videos{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:18px;margin-bottom:18px}
+.videos .v{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:var(--ink-2);border:1px solid var(--line)}
+.videos iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.masonry{columns:3 300px;column-gap:18px;padding-bottom:80px}
+.masonry figure{margin:0 0 18px;break-inside:avoid;border-radius:12px;overflow:hidden;background:var(--ink-2);cursor:zoom-in;position:relative}
+.masonry img{width:100%;height:auto;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.masonry figure:hover img{transform:scale(1.03)}
+.next{display:block;width:100%;text-align:left;border-top:1px solid var(--line);padding-block:48px calc(48px + env(safe-area-inset-bottom,0px))}
+.next .mono{color:var(--mute)}
+.next h3{margin:10px 0 0;font:900 clamp(32px,6vw,90px)/.95 var(--f-display);letter-spacing:-.04em;text-transform:uppercase;transition:color .4s}
+.next:hover h3{color:var(--glow-a)}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:250;background:rgba(6,5,10,.94);backdrop-filter:blur(10px);display:grid;place-items:center;padding:calc(56px + env(safe-area-inset-top,0px)) 16px calc(56px + env(safe-area-inset-bottom,0px))}
+.lb img{max-height:100%;max-width:min(100%,1400px);object-fit:contain;border-radius:8px}
+.lb button{position:absolute;padding:12px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(10,9,16,.6)}
+.lb .x{top:calc(14px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px))}
+.lb .p{left:max(16px,env(safe-area-inset-left,0px));top:50%}
+.lb .n{right:max(16px,env(safe-area-inset-right,0px));top:50%}
+.lb .c{position:absolute;bottom:calc(18px + env(safe-area-inset-bottom,0px));color:var(--mute)}
+
+/* reveal */
+.rv{will-change:transform,opacity}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .loader{display:none}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"><span>VIEW</span></div>
+
+<div class="loader" aria-hidden="true">
+  <div class="loader__count">000</div>
+  <div class="loader__meta mono"><span>Emad Alnabelsi</span><span id="ldTc">00:00:00:00</span><span>Portfolio ’26</span></div>
+  <div class="loader__bar"></div>
+</div>
+
+<header class="chrome wrap">
+  <a class="logo" href="#top">EMAD.</a>
+  <div class="rec mono"><i></i>REC · <span id="tc">00:00:00:00</span></div>
+  <nav class="mono">
+    <a href="#work"><span>Work</span><span>Work</span></a>
+    <a href="#about"><span>About</span><span>About</span></a>
+    <a href="#contact"><span>Contact</span><span>Contact</span></a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <div class="hero__glow" aria-hidden="true"><b></b><b></b></div>
+    <div class="vf mono" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="iso">4K · 25FPS · ISO 800</span><span class="tc" id="tc2">00:00:00:00</span></div>
+    <div>
+      <div class="hero__eyebrow mono">Graphic &amp; Multimedia Designer · Amman, JO</div>
+      <h1 aria-label="Emad Alnabelsi">
+        <span class="line" data-split>Emad</span>
+        <span class="line outline" data-split>Alnabelsi</span>
+      </h1>
+      <p class="hero__lead">I design and animate visuals that stop the scroll. <strong>Branding, motion graphics, video editing</strong> and print, built in Adobe Creative Cloud and Figma, and sped up with AI tools like Claude and Magnific AI.</p>
+      <div class="hero__cta">
+        <a class="btn btn--solid magnetic" href="#work">See the work ↓</a>
+        <a class="btn magnetic" href="#contact">Let’s talk</a>
+      </div>
+    </div>
+    <div class="portrait" id="portrait">
+      <img src="https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/b7811383-2b41-4499-8a96-6415639e083f_rwc_175x70x6167x4158x4096.jpg?h=690820f70768f21dbe3bb7cc0d74ef9d" alt="Portrait of Emad Alnabelsi" fetchpriority="high">
+      <div class="portrait__tag mono"><i></i>Available for work</div>
+    </div>
+    <div class="scroll-hint mono" aria-hidden="true">Scroll<b></b></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track" id="marq">
+      <span>Motion Graphics</span><span>Video Editing</span><span>Branding</span><span>Social Media</span><span>Print</span><span>Editorial</span>
+      <span>Motion Graphics</span><span>Video Editing</span><span>Branding</span><span>Social Media</span><span>Print</span><span>Editorial</span>
+    </div>
+  </div>
+
+  <section class="sec" id="work">
+    <div class="sec__head wrap">
+      <h2 class="rv">Selected<br><em>Work</em></h2>
+      <p class="rv">Five collections from 2025–2026. Open any project to see the full set, videos included.</p>
+    </div>
+    <div class="reel" id="reel">
+      <div class="reel__track" id="track"></div>
+    </div>
+    <div class="wrap"><div class="reel__progress"><b id="reelBar"></b></div></div>
+  </section>
+
+  <section class="sec wrap" id="about">
+    <div class="sec__head"><h2 class="rv">About<br><em>me</em></h2></div>
+    <div class="about">
+      <div>
+        <p class="about__big" id="aboutText">I’m Emad, an ambitious graphic and multimedia designer. I turn ideas into visuals people remember, from a brand’s first logo to the motion piece that launches it. I care about clean craft, strong concepts and delivering high quality on deadline.</p>
+        <div class="services">
+          <span>Brand Identity</span><span>Motion Graphics</span><span>Video Editing</span><span>Social Media Campaigns</span><span>Magazine &amp; Editorial</span><span>Print Production</span><span>AI-Assisted Visuals</span><span>UI Design in Figma</span>
+        </div>
+      </div>
+      <div class="toolset">
+      <div class="tools__label mono">Adobe Creative Cloud</div>
+      <div class="tools">
+        <div class="tool rv" style="--tc:#31A8FF;--tb:#001E36;--lv:95%"><div class="tool__ic">Ps</div><h4>Photoshop</h4><p>Compositing, retouching, social posts</p><div class="tool__lvl"><b></b></div></div>
+        <div class="tool rv" style="--tc:#FF9A00;--tb:#330000;--lv:90%"><div class="tool__ic">Ai</div><h4>Illustrator</h4><p>Logos, vector art, print layouts</p><div class="tool__lvl"><b></b></div></div>
+        <div class="tool rv" style="--tc:#9999FF;--tb:#00005B;--lv:92%"><div class="tool__ic">Ae</div><h4>After Effects</h4><p>Motion graphics, kinetic type, VFX</p><div class="tool__lvl"><b></b></div></div>
+        <div class="tool rv" style="--tc:#9999FF;--tb:#00005B;--lv:90%"><div class="tool__ic">Pr</div><h4>Premiere Pro</h4><p>Edits, reels, color and sound</p><div class="tool__lvl"><b></b></div></div>
+      </div>
+      <div class="tools__label mono">Design &amp; AI</div>
+      <div class="tools tools--ai">
+        <div class="tool rv" style="--tc:#A259FF;--tb:#1E1E1E"><div class="tool__ic tool__ic--figma" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><h4>Figma</h4><p>UI, layouts, design systems</p></div>
+        <div class="tool rv" style="--tc:#D97757;--tb:#2A1810"><div class="tool__ic" aria-hidden="true">✳</div><h4>Claude</h4><p>Ideas, copy, creative workflow</p></div>
+        <div class="tool rv" style="--tc:#7C5CFF;--tb:#150F33"><div class="tool__ic" aria-hidden="true">M</div><h4>Magnific AI</h4><p>AI upscaling and image enhancement</p></div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec contact wrap" id="contact">
+    <div class="mono">Got a project in mind?</div>
+    <a class="contact__big" href="mailto:emadmazen98@gmail.com"><span>Let’s</span><span>Create</span></a>
+    <div class="mail">
+      <a href="mailto:emadmazen98@gmail.com">emadmazen98@gmail.com</a>
+      <button id="copyMail" type="button">Copy</button>
+    </div>
+    <div class="mail mail--phone">
+      <a href="tel:+962788221616" dir="ltr">+962 78 822 1616</a>
+      <a class="wa" href="https://wa.me/962788221616" target="_blank" rel="noopener">WhatsApp ↗</a>
+      <button id="copyPhone" type="button">Copy</button>
+    </div>
+    <div class="socials">
+      <a class="btn magnetic" href="https://www.behance.net/emadmazen2" target="_blank" rel="noopener">Behance ↗</a>
+      <a class="btn magnetic" href="https://www.instagram.com/emad.design98/" target="_blank" rel="noopener">Instagram ↗</a>
+      <a class="btn magnetic" href="https://www.linkedin.com/in/emad-alnabelsi-3259341a5/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap mono">
+  <span>© 2026 Emad Alnabelsi</span>
+  <span>Designed to move</span>
+  <a href="#top">Back to top ↑</a>
+</footer>
+
+<div class="proj" id="proj" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="projTitle">
+  <div class="proj__bar wrap">
+    <span class="mono" id="projIdx">01 / 05</span>
+    <button class="proj__close mono" id="projClose" type="button">Close ✕</button>
+  </div>
+  <div class="wrap">
+    <div class="proj__hero">
+      <div class="mono" id="projCat" style="color:var(--glow-b)"></div>
+      <h2 id="projTitle"></h2>
+      <p id="projDesc"></p>
+      <div class="proj__stats" id="projStats"></div>
+    </div>
+    <div class="videos" id="projVids"></div>
+    <div class="masonry" id="projGrid"></div>
+  </div>
+  <button class="next wrap" id="projNext" type="button"><span class="mono">Next project →</span><h3 id="projNextT"></h3></button>
+</div>
+
+<div class="lb" id="lb" data-lenis-prevent hidden>
+  <img id="lbImg" alt="">
+  <button class="x mono" id="lbX" type="button">Close ✕</button>
+  <button class="p mono" id="lbP" type="button" aria-label="Previous image">←</button>
+  <button class="n mono" id="lbN" type="button" aria-label="Next image">→</button>
+  <div class="c mono" id="lbC"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+const PROJECTS = [{"slug": "awareness", "title": "Design Awareness Campaign", "cat": "Motion Graphics · Campaign", "year": "2025", "cover": "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/0cf86c31-79ed-4520-bd50-51e81feb999e_car_4x3.jpg?h=4d27490065cb938fd05004c1e86e0737", "desc": "A motion graphic awareness campaign that tackles negativity in the community, from storyboard frames and key visuals to the final animated film.", "tools": 3, "images": ["https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/36dc4a1f-010d-47ea-a5a6-a9e887530131_rw_1920.jpg?h=7cf5b16091ebd1a26b7e43e5697aecdf", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/13419ad9-3895-4ece-977a-d73147737280_rw_1920.jpg?h=256ab64cefd8e8735f6bad709deca0b6", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/609ff4e9-2ed3-4ee6-ab47-670ebc295c65_rw_1920.jpg?h=99d45df04ca238212e6ebb87141c02e0", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/75321e9a-7e1c-4e33-83e8-867662afa25b_rw_1920.jpg?h=f7465ec0ffbf7d3b935e68bd2055925f", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/b6e50310-448d-4156-8b47-727f956aa58b_rw_1920.jpg?h=841e2197251873718c38f780647aa5c2", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/d9bbdd48-653d-4494-a5c1-a1045ef11264_rw_1920.jpg?h=fd16dcb22e6952d9fc6c9a6015336e82", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/1638be6a-8337-4a57-96d2-6a0054185e24_rw_1920.jpg?h=b58dae6b90cef427b2a411c68c51c3c0", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/3cc623eb-486d-48e9-951e-63b6b9915f59_rw_1920.jpg?h=d25f896406ce8c4112ffb3029e4e2c04", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/6b0b7db3-953b-4077-827a-95326d1ef571_rw_1920.jpg?h=6a4ea88960e16cd06a54e7d87aca650a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/b8a43303-8f42-420f-9e8c-b2869508fa99_rw_1920.jpg?h=74de16a561e05c2b072d1ba89a0b9e21", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/4e9bf315-ab67-437b-9af6-b4a69a9c1f0f_rw_1920.jpg?h=b97a45811010960810a6051e0af453ea", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/23b26774-addd-4637-8068-d3df3abfb2f4_rw_1920.jpg?h=efa53cdfefcba22e2d0ea531e30efe36", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/9d6c4042-a5ab-4739-829a-f5b8e68f87e5_rw_1920.jpg?h=b72aeaf15131ddda733beb3cb7bc6e05", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/4783cb59-0d3b-4d83-8d40-849862f42c0d_rw_1920.jpg?h=71774a5cb17b69d65ef85009e42fcfe2", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/29a524c3-c592-49f9-a3c8-e62c98e4bf87_rw_1920.jpg?h=233b4af6a2d4cccbe1c9f6cfc3c63a30", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/35c8b2cd-7bf0-49cc-89b6-f38c0796e4cc_rw_1920.jpg?h=1260fb95f814bbe6113155512a14fe20", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/ad24c7b7-2668-4abd-9aed-67e25b925780_rw_1920.jpg?h=c04c3464b410ef7f90e07cd347cf5d92", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/683b7a62-47b2-4cef-8787-89ebf129daf2_rw_1920.jpg?h=5a8fb99dc8ad51f209c0b83d91f40016", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/5bf07356-1a2c-4686-9e03-49315151003c_rw_1920.jpg?h=e134ba0c9d79a70c28799083a9a67d50", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7cffe06d-d402-4d73-abae-e7eec65aa715_rw_1920.jpg?h=a77a85b19434bf1916568449618d569e", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/82601039-52fa-466b-8a81-36ae0447d5b2_rw_1920.png?h=c0a213ca765539eb776953c6abe2e741", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/ce4e6f0b-fc40-42bf-9325-96e3976d721d_rw_1920.png?h=6cc82243243c69ffe1f4781418f441f7", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/485c501f-a2d8-499c-a966-40fef7e1dbdb_rw_1920.jpg?h=56746001d22c17f8b30b615db5c2cc03", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/9d901ad6-6969-4e1c-a465-904ebd4afa33_rw_1920.jpg?h=a81ea739205387711268474ec63fb1d8", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/a0e214d3-991c-44f2-9d76-73c3345fbd90_rw_1920.jpg?h=226cecc8ed2bfea47330e791f31010e6", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/213a4903-365e-40a6-846e-8bfa608eefd6_rw_1920.jpg?h=ce0b7ea0f2c8516900751b5ca5474835", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/89a4db7f-b508-41c9-8d20-956e8b4e5dbd_rw_1920.jpg?h=23ae8877c7d6c69ed00666a1a762c7b2", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/f786c511-11eb-45cd-8196-20c5673a0648_rw_1920.jpg?h=5a74be16b21038787748a643abf5b902", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/3ee7c9ed-667b-4856-b45b-88db1cc86fbb_rw_1920.jpg?h=dcb7755aaa6ced9f1940579b7ca0c0ed", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/23e45900-1e32-4077-8371-8588997781e2_rw_1920.jpg?h=f63c1aa8f5a1ca9a7aaa72f5b9a80663", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/16a2b4d8-0f25-49a5-9f16-d5bd9d811b0f_rw_1920.jpg?h=9708691ddf54ffe24dee5e98fe692982"], "videos": ["RV4GIVeJHNV"]}, {"slug": "designs", "title": "Designs", "cat": "Branding · Social Media", "year": "2025", "cover": "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/fca01c99-1750-47c4-bcc3-6a4f9fe0df32_car_4x3.png?h=ad670a41f14d0775f7a71a12d846adb8", "desc": "A collection of social media posts, key visuals, posters and short motion pieces across brands and campaigns.", "tools": 4, "images": ["https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/104db7a6-6d12-4abe-8280-73ce74ff1cda_rw_1200.png?h=4eefe69a8e65969011dd7502fc1aaba9", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7e9b9fe9-4f9d-45f1-87f9-8b6dd6d5201a_rw_1920.jpg?h=8af3404cb70996dfdd74c9236627ab42", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/112ea4eb-4bf4-4ff5-89b2-e5cc36354b98_rw_1200.png?h=e13661da455717bb06ae7e6c943aed6d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/efb6ebb3-93a1-4f17-93ca-026c063226aa_rw_1200.png?h=8123c12d86e1035a41e92446e1a5b598", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/da3efdcb-388b-42c2-8c78-187032a2f60c_rw_1200.png?h=37f775f4b5f0097e33de997e4c38d22f", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/0e8faf4f-fbce-4880-bf0c-a595b04e6df0_rw_1200.png?h=57cf5778d82644b63211693502adad4c", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/165c5a99-006c-4e3f-946e-ca15a55e8665_rw_1200.png?h=077726c62503a49f762feed36b208df2", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/853ff132-55f6-4c39-8b02-bdb17525ca67_rw_1200.png?h=80ddd1bc350a650461acedec0b7bb64d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2ea4d47f-346e-4d0d-a11d-0c39f048005d_rw_3840.png?h=a133c334e48eca9cf205f289d8551100", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/a91df3e7-eeca-4ea1-abff-dae37712e8d1_rw_3840.png?h=6a951eb6987a5a8c4d754121445a4191", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/aec356b1-1f65-488c-bc78-525565917524_rw_3840.png?h=8b585a43b10515d3aad0b9a830bdb56a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/63b4ffd5-5c4a-45b3-962e-c0fffa642509_rw_3840.png?h=0d612ddc96332080e50aecbd463e13dd", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/cb15c728-f7ee-4406-9c16-15411658d951_rw_1200.png?h=145c2054176f439dbf41391ff3ff5c3e", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/af8a8394-2e9f-475f-a340-6a989699acc7_rw_1200.png?h=7cf50156a184e8093feac7840fbc66df", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/8ace89a2-c8ba-4639-9eba-9f780ac3ab70_rw_1200.png?h=b8edd2084d1e72f5cbeec05d6a498f8d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/b36c5b8b-9834-4da4-b1c6-2ce85bc8d74f_rw_1200.png?h=b77b2d0c489610dabe4a8accbe15a167", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/dfdcb0fa-2ede-4333-bb04-0053b9a48107_rw_1200.png?h=08a4631e83c3247f97c69505db263ccf", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/48f0a519-78eb-46a9-b9a7-b5d36a215776_rw_1200.png?h=248fff8fea4141e31b3c02d68a9f200a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/12b6dc47-574d-4e7c-8326-536f18d02a5c_rw_1200.png?h=5fa89e02dd1b422c2d5abd0b7007f010", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/e34a306b-f148-4a5f-a91b-b0e436ab593c_rw_1200.png?h=1acbc30abd18c7224f870951cc7356ca", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/8c0c8802-126a-46be-a95c-9d68aa41335e_rw_1200.png?h=0cb72b71b5ac797e1243b83108f84640", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2ecb3bd9-36cc-4bc7-9df1-f72b084bc891_rw_1200.png?h=8a9daaec66cde8c72ec154271ba94e48", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/07db52c9-356e-40c4-873a-96e20cf0c9c1_rw_1200.png?h=a9a4a13fc7ed1fbe4828a2166f885dce", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/0aa55f8b-8a08-442b-a978-3c78674e89dd_rw_1200.png?h=aa8821e2909b4de3d8c5cf289d9b0153", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/bdc2b14a-176c-4cf6-8cdd-c3ec6b6267aa_rw_1200.png?h=0a85781b5fd8acef150801c5163370a3", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/56e10edb-778d-4246-96b0-1e5524fcf8d9_rw_1200.png?h=527f047e3b33ce9b97db56e1e64fb693", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/3bb3ddc1-0d05-4cfc-8a3c-bca78398b393_rw_1200.png?h=edfcc8d3db48d1874a865c72b87070f0", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/c3e1b806-1362-43c6-af48-2d1b08635383_rw_1200.png?h=6cf92401a1f9e7d7f48fb8239dfc6b2e", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/349e19c1-97b9-4622-a6ef-e628e6fe74d1_rw_1200.png?h=b3ab07092af54fea7ae54d6f114c3f78", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/bbbf87e6-994c-4e02-95f6-c87478fc9f54_rw_1200.png?h=d13dff29651dfb61e5355a1ca47017d5", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/920f8146-94fb-41ae-a1bb-08789415a4fd_rw_1200.png?h=0030b58e7f39b62f69ffef4a11166593", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/8cc58e64-778d-4ed9-92ae-4d3e5b1a67b1_rw_1200.png?h=53915ead55c943f789547cfe12f13210", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/43d7887e-41c1-44f7-8f3b-2d03b6ddae2a_rw_1200.png?h=0cfcaf9e90a52ae1305cc70e91644e74", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/f34a67fd-3909-48cf-9a8c-bfe7790cdd77_rw_1200.png?h=23b83d91cabf371d50c4f2fa0ac5c5b0", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/98dc4a4f-3bc2-4fc5-aa88-9e4170398bfb_rw_600.png?h=f3a06dbca5d33788b2aa4e4dc2e1d793", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/bb6e0a03-877a-46e5-925e-c6cea6149132_rw_1200.png?h=5a38327bb33dc922595f857619b0e859", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/6ff42324-a4d9-4cf2-b1ff-c0b7ac7828f2_rw_1920.png?h=6f7840798141668e1f8b37d00a6ea011", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/722276b5-7fa8-4073-80a0-ae4cd2b7d31a_rw_1200.png?h=089e531fc7edf5ab49e8568caf5351f2", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2263c08c-6115-44e4-93e0-f37b4a707397_rw_1200.png?h=982d429f52e5fb348d446565009e48be", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/a8cc7ae8-51eb-41b5-a7f6-aca211e566ad_rw_1200.png?h=b4c72fff0684dbd8018de894b5c94862", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/de5acd3f-833c-4587-ba5e-754900a1f622_rw_1200.png?h=0d856674516ffcd70f55be39f926e182", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/e90596a1-2c6e-4334-bdf2-8df5a0597cfd_rw_1200.png?h=9bf01f7a10e4d153ad8a6338124778ad", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/349ba6a2-6fdd-478d-b142-59a5d0aaf18b_rw_1200.png?h=1f23875049f8815377056f3555e4c879", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7bbfae82-94bb-475c-9fb2-8d06d21ae532_rw_1200.png?h=e28f95be318213df5d06bf4fe364e3be", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/a4dd7ffc-b4e1-40a2-a368-df70a4b12ddc_rw_1200.png?h=c934a469bbcace653912993aa25c74b8", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/96282b3c-faf1-4cf9-b776-279a294cb568_rw_1200.png?h=0e75c9d423f0943eb7ea29249b36ac07", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2fe59129-9026-4ce5-ab8c-c62ddf28fb9c_rw_1200.png?h=8cb2db786814922df8a35d3490025378", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/70eed674-0816-48fd-bfdc-4d61cdb16762_rw_1200.png?h=172a8e82941b46ee723b806e3c8ac357", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/47b484c2-5972-4085-a2c1-d1cd73b30d65_rw_1200.png?h=d7f764c7b668ba5cacb16ae25345ec56", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/bee5f69a-29df-426a-84be-40f26fa35ec6_rw_1200.png?h=8d612fea320388d2b1f68830cccd53a1", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/1cc6a41c-5be0-4c73-a142-657bb48c20f5_rw_600.png?h=64e41ca3cee71aa75d7519a1d09265d9", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/3f1bba10-3a5f-426d-af85-0532d80ab0a6_rw_600.png?h=903ca83557b305b6eec713b61294c1f4", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/f147f5e2-023f-4303-80de-8b400b935bd5_rw_600.png?h=63cf9d06f2a63a3bd9290f0645fa89e3", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/77c906f2-8a61-4810-875c-b8f930a6775c_rw_600.png?h=59717ada372ec1c79a386e0d8b53c0ec", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/58b3b94f-491a-4ef6-9e19-805663db954e_rw_600.png?h=e7414448bb61ada12002c65848066eb0", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/5df51a25-a44e-4174-8c2c-938accc7f571_rw_1920.png?h=e96eeb5aadcce66cc031b6374ff2f9c9", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2cb8368a-4a46-4c29-8f66-404493ab4556_rw_1920.png?h=ce0511df39c5f9d84ed3e3cb83c301b8", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/70df3465-6c4c-405c-93ea-ebe469471dd5_rw_1920.png?h=efab0f4ba0f4b1632387f3b1bae3bcfa", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/a25d0ac8-1fbb-4fef-a792-0a1c0838da18_rw_1920.png?h=99700427be4aa7104e254e7e62c3c00a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/b6f4bbfd-4d19-4ede-bceb-1a379995eb65_rw_600.png?h=6263520d5b124321666aa5b55cac863d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/51d0679c-6901-44a5-970c-500446ba02c1_rw_600.png?h=fc8c58c3815af9675495451d6a0ebf8c", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/c0a66f7d-743e-46df-8888-920d07b9f1e6_rw_600.png?h=85ae0cabf5e20159f91175194cee00f3", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/f81dff91-6bd9-429e-a49e-adfaf129c80b_rw_600.png?h=d94a1fdb8fe8ae3020421f0f7a86e71d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/c30887b6-312d-4947-8ecc-72bd7f63c961_rw_600.png?h=79723458a1e37abdd02b5c441efcfc89", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/55428fb2-2dd5-459a-8768-a762276c078c_rw_600.png?h=5d7deba023c1dd67abb9ed1489c4f19d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/dadb3960-ffe3-4cfa-86d8-d56c327d18d7_rw_600.png?h=10a15322305bb409dedd0103d3c9521f", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/c2eba1d3-00ff-4a99-a835-0d5f1a1ecbb8_rw_600.png?h=1799f8408cb9c714a10b91246393aa2f", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/179b6dab-0315-47a9-bf1a-f603cfe10f5f_rw_600.png?h=a69684864e256a6f244a2c349b6d1bdf", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/1c55295b-5904-4af7-a95c-0c6841afc1cd_rw_600.png?h=cf5e3effa34c8492115312294fd793a6", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/5ea853af-43d5-489f-aa79-8b7d60f089ae_rw_600.png?h=33a27e13096c112e807af783d5ff61df", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/9323827c-e641-47a7-95e7-f5a38fe8b36e_rw_600.png?h=dd45769c7ae94b5c3372f247d77ea42a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/68ab175d-e0ca-40b5-b70a-709c223a321a_rw_600.png?h=7a08cf7b9cbfdf6168097e473a76b7b4", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/15a9dd80-d810-43e3-b7f8-5321ee64802e_rw_600.png?h=7f0719e65d3977dc8dad6f059c531369", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7d93134e-724d-4c82-88aa-37679e33e5ba_rw_600.png?h=44c1e57bd2ff8fad939d3b1a155e232a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/0cec2796-6796-4285-9702-359c9ee951ca_rw_600.png?h=718d9c6ef9b523f7b26be888e011ddd2", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/9e04ff2a-3c57-4698-8648-2a1d8b2e45c6_rw_600.png?h=1302083c4462d85727a6b5c1b524e151", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/ded50964-55f3-4cee-9455-9c7796ddff1f_rw_600.png?h=b6c049edd29967818355e5e6f1e1dfd8"], "videos": ["QX5RIgJS7z2", "UmgGjtQnF8U", "3bwzfhqdKMf", "RYpV8rXunEw", "MpB4gIxqmDn", "IRhpmCiR6GU", "3HTNT3qFjeF"]}, {"slug": "video", "title": "Video Editing & Motion", "cat": "Video · Motion Graphics", "year": "2026", "cover": null, "desc": "Edits, reels and motion graphics: pacing, sound design, color and animated type, cut in Premiere Pro and finished in After Effects.", "tools": 2, "images": [], "videos": ["W3jiwZ5xtmo", "Cg-JPVYnich", "82UFby24-xT", "WFSABh-aZ5q", "Rj6FzRheKL_", "R-z--jcxAqz", "RgW7MSDtAeY", "QhLcR_cKTfE", "SwqnZURcbjb", "A59oXJoDHjz", "BRU5kEm-jkK", "2HIWJYxYxk5", "7RnJ8rq5GcE", "A2XkNJoc2_t", "9RWZMVaqmBf", "47kdnMDFc_x", "AGEjHzIBu2x", "7mqZqcVI94c", "-6z_IDcsgpQ", "Md6bcQVPJ9M"]}, {"slug": "sae-magazine", "title": "SAE Magazine", "cat": "Editorial · Photography", "year": "2025", "cover": "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/5c348ddc-af3a-4568-af01-ae6ee7af72db_car_4x3.jpg?h=0c802cb549adf1fa3b3990a9ae054455", "desc": "Magazine layouts and editorial spreads for SAE, pairing behind-the-scenes photography with clean typographic systems.", "tools": 3, "images": ["https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/ebbc59c9-7540-4f16-8bb0-56e46d9f49bd_rw_1200.jpg?h=dbb716bd0462a66fc70d4eb196c4424a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/5866da80-4663-467b-b3c5-89f331fcf5e0_rw_1200.jpg?h=0d3d69b92298ff9e3980d9b67046228b", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2e6cb0a4-30b3-49dd-8a34-4fe9c9d994cd_rw_1200.jpg?h=a7c6c6df31a6034546b2f3e950b9bf0d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/e7790d1c-4ebb-45dd-b9a3-23be21694e82_rw_1200.jpg?h=f87944a9002ec1417363a181da977090", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/522c1c8c-92fe-4310-a18e-615756eb07c1_rw_1200.jpg?h=7a6cce809a50311c503ed7d5079473ea", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/4ce73970-e3f2-4525-9d3c-83e286df3b2c_rw_1200.jpg?h=d19bdb69736fd75be9824f4086493252", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/3686c01a-5141-4043-bc53-636db4cb542b_rw_1200.jpg?h=44191351890388c633b99a5aa5ac464b", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/b9077a9d-f5f3-4e78-840c-b077ee7e3e09_rw_1200.jpg?h=959ced16ff138fb54d98af2a2976cd9a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/f17c075b-a358-46fe-9238-4aaa9a062bb9_rw_1200.jpg?h=916c911f540e2b125376297862d19804", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/1b3b7278-63b4-46b0-9627-8722bfe37760_rw_1200.jpg?h=ce920c306373a5b1f0379f42b3e2f6c7", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/e5872c96-61e8-45c2-94d9-2947274ae81c_rw_1200.jpg?h=3e43e21e886f7d495403b2b9ae831c16", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/49603ef6-482e-4e8b-a1b3-47c6d242f2bd_rw_1200.jpg?h=fb5d831c841fb76ac5dfa639750f89b9", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/801e3900-9f39-4de2-8f34-b4df9fe87175_rw_1200.jpg?h=72f6c5279803e1df5fcd160225e44a3a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/9bcc5d6f-411b-4910-bd95-afcd099e161c_rw_1200.jpg?h=19a0f25a2cd6f826837a74ea9bc198c5", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2a92a4c7-1474-422a-aa3a-6342e96490ef_rw_1200.jpg?h=3faac72ea5de1792872b692ca45f5dd6", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/55b889a6-c599-47f4-b20e-91e1a1b312f1_rw_1200.jpg?h=628a0f75f9d4d4ee1e5b100b337061cc", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/653474a2-02df-4462-bb0b-96667b1444b9_rw_1200.jpg?h=f22de6b59a1abc8d68ddff6eaa5d72f6", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/78938939-3ea0-4b89-bb28-bbc80105f798_rw_1200.jpg?h=ad1b6491a7e61332555b1685d49cfeed", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7ee9cd1c-2162-414f-bee6-f21d72f49b15_rw_1200.jpg?h=091ce684fe600d4b360374214ed8e3ee", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/71a5594f-3ce6-477e-8382-6fab0b23283e_rw_1200.jpg?h=dfd4efde11aa13095b2b28f3772038ee", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/162c94ab-3335-4049-b24c-015c0a1c42ae_rw_1200.jpg?h=5619f1653709bfdcfba899cd7618359d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/0bc25e99-4b90-4ed6-9786-a916dc4857d9_rw_1200.jpg?h=e93ab928de0d7c0528f184eab373341a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/30b6cc8b-cb9d-484a-9671-1454e4c929e6_rw_1200.jpg?h=4f2117ec10ad494a75ea70e9b1acff1f", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7889bb6e-81c2-4043-b34c-10715c4b49cd_rw_1200.jpg?h=c4025f8c965259d8f34189e0dbc53b90", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/6b3a7d2a-75d9-4404-9a75-bc2c1a96696c_rw_1200.jpg?h=80af28c09cfaa649c05346d1b96c23a5", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/bd93e409-ee47-4196-bd00-dad7ec7aec8e_rw_1200.jpg?h=f7fd73b497c54a887e48a19fa37f5c0a", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/e222fb11-6215-43a8-abc2-d3128c8473bf_rw_1200.jpg?h=76e01eeab6ab7e8a6648fbe05430d858", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/fc9555ac-fbbf-433f-a9f3-084ce1ab2899_rw_1200.jpg?h=5d0ca5e95713f7ac5c467daf190f1f46", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/4e378d32-4303-4ff5-97ed-ecce776f27cd_rw_1200.jpg?h=a1a5cae46177c5be6215ed915cdb5f84", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/53529368-b323-48d0-bc39-ee927401e3c7_rw_1200.jpg?h=80196368a41da9c360afc7f77dfc3b6d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7c1ca574-f15a-45ec-98cc-7f3dfbbec5aa_rw_1200.jpg?h=d972d4c4ef6c455bc716c1dbad97a433", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/c7f308fa-196f-4b21-a52d-d44ce1220c91_rw_1200.jpg?h=55a75a5555a71baa346f66d886345109", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/57dd5124-bf6c-4fe1-aa65-2798c5931dfc_rw_1200.jpg?h=48e5979e42890eaaa54a50d080e0db5b", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/5af15589-d91a-458b-8a4a-692eb1335c2e_rw_1200.jpg?h=450e21c241b1eb186d5c517305cc8000", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/55a7eefc-7b8d-4333-bdfe-7c6946bf959c_rw_1200.jpg?h=8e10ffd7eff177b85c40e554775fb7d2", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/691b7196-d2a5-4b1e-9f40-cd1ae624cbc7_rw_1200.jpg?h=c68b5e05c16471c92b14530ff02b17f2"], "videos": []}, {"slug": "sae-print", "title": "SAE Print", "cat": "Print · Layout", "year": "2026", "cover": "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/dfab8019-4a61-4250-83d3-d00f90459888_car_4x3.jpg?h=ec3023b21d013dd86321052f94dd079e", "desc": "Brochures and printed collateral for SAE’s creative media courses, built for real-world print production.", "tools": 2, "images": ["https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/7130f2b6-6902-4086-9463-86fe8ae23e04_rw_1920.jpg?h=1df4e706b29053b6ee370d33deab7be1", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/9ed66a10-50ef-4100-a980-d8d531eb008f_rw_1920.jpg?h=09a42ac5a154d360a925d904904cac43", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/671feff9-4f27-4a6d-b3c7-d597fab02492_rw_1920.jpg?h=2ff2b8bf8aaa5c9e93d51f6fbd3fcecd", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/67b58ca3-a35a-4202-aa68-7025e5fa8223_rw_1920.jpg?h=3f1951f8b508886fcbb93c86986eabdc", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/f6fb3b2e-58c5-4b86-b71c-276fca3a9dc8_rw_1200.png?h=5441f03a84d50f5750fbc95fe0ab7072", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/044ed9de-427a-46fc-934e-fce29aa9f0ef_rw_1200.png?h=616e51428d553a7ac732393a640c3d76", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/2a26686c-6d2e-4783-a931-f320f39adcb4_rw_1200.png?h=c5c14a6f46bcb582bbddddaa873ade5d", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/37d4aff0-48f7-42a5-886f-a3693f27ff87_rw_1200.png?h=8ccfaaafe91f1941d1357044b0bd59ad", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/5f9224f0-de8a-4f27-8873-0fbe8fce845b_rw_1200.png?h=4a3755a9b0f3a61d5764b6719a0e9498", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/8756f256-49d5-43dd-a5df-556e5013fa97_rw_1200.png?h=b1392a230b40fce2b4b49c116bd983e5", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/cb92bc96-7b36-4e79-b00a-55a2780e196b_rw_1200.png?h=4bfa46c350e1e1f637055a7c06f37017", "https://cdn.myportfolio.com/9182b4d6-c118-41b1-817c-98b1c711b6ea/e88c7f7a-c281-41d5-b9e4-4749a69409f0_rw_1200.png?h=388f0d972ea41b165caba20efc7fc2c3"], "videos": []}];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+const $ = s => document.querySelector(s);
+const pad = n => String(n).padStart(2,'0');
+
+/* ---------- build reel ---------- */
+const track = $('#track');
+PROJECTS.forEach((p,i)=>{
+  const b = document.createElement('button');
+  b.className='card'; b.type='button'; b.dataset.i=i;
+  const media = p.cover
+    ? `<img src="${p.cover}" alt="${p.title} cover" loading="lazy">`
+    : `<div class="vidcover"><i class="strip t"></i><i class="strip b"></i><div class="play"></div><div class="label">Showreel</div></div>`;
+  const count = [p.images.length?`${p.images.length} images`:'', p.videos.length?`${p.videos.length} videos`:''].filter(Boolean).join(' · ');
+  b.innerHTML = `<div class="card__glow"></div><div class="card__media">${media}<div class="card__badge mono"><i></i>${count}</div><div class="card__num">${pad(i+1)}</div></div>
+    <div class="card__meta"><h3>${p.title}</h3><span class="mono">${p.year}</span></div><div class="card__cat mono">${p.cat}</div>`;
+  b.addEventListener('click',()=>openProject(i));
+  track.appendChild(b);
+});
+
+/* ---------- timecode ---------- */
+const t0 = performance.now();
+const tcEls = [$('#tc'),$('#tc2'),$('#ldTc')];
+(function tick(){
+  const f = Math.floor((performance.now()-t0)/40), fr=f%25, s=Math.floor(f/25)%60, m=Math.floor(f/1500)%60, h=Math.floor(f/90000);
+  const str = `${pad(h)}:${pad(m)}:${pad(s)}:${pad(fr)}`;
+  tcEls.forEach(e=>e&&(e.textContent=str));
+  requestAnimationFrame(tick);
+})();
+
+/* ---------- split hero letters ---------- */
+document.querySelectorAll('[data-split]').forEach(el=>{
+  const cs=[...el.textContent]; el.innerHTML = cs.map((c,i)=>`<span class="char" style="background-position:${cs.length>1?i/(cs.length-1)*100:0}% 0">${c}</span>`).join('');
+});
+
+/* ---------- smooth scroll ---------- */
+let lenis = null;
+gsap.registerPlugin(ScrollTrigger);
+if(!reduce && window.Lenis){
+  lenis = new Lenis({lerp:.09, smoothWheel:true});
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
+}
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+  const id=a.getAttribute('href'); const t=id==='#top'?0:document.querySelector(id); if(t==null)return;
+  e.preventDefault(); lenis?lenis.scrollTo(t,{duration:1.6}):(t===0?scrollTo({top:0}):t.scrollIntoView());
+}));
+
+/* ---------- preloader + intro ---------- */
+function intro(){
+  const tl = gsap.timeline({defaults:{ease:'expo.out'}});
+  tl.from('.hero h1 .char',{yPercent:110,rotate:8,duration:1.4,stagger:.035})
+    .from('#portrait',{clipPath:'inset(100% 0 0 0 round 220px 220px 18px 18px)',duration:1.6,ease:'expo.inOut'},0)
+    .from('#portrait img',{scale:1.4,duration:2.2},0)
+    .from('.hero__eyebrow,.hero__lead,.hero__cta,.chrome',{y:30,opacity:0,duration:1.2,stagger:.1},.4)
+    .from('.vf i',{scale:0,opacity:0,duration:.8,stagger:.08},.6);
+}
+const loader = $('.loader');
+if(reduce){ loader.remove(); }
+else{
+  document.body.classList.add('locked'); lenis&&lenis.stop();
+  const o={v:0};
+  gsap.timeline()
+    .to(o,{v:100,duration:2.2,ease:'power3.inOut',onUpdate(){ $('.loader__count').textContent=String(Math.round(o.v)).padStart(3,'0'); $('.loader__bar').style.width=o.v+'%'; }})
+    .to('.loader__count',{yPercent:-120,opacity:0,duration:.5,ease:'power3.in'})
+    .to(loader,{clipPath:'inset(0 0 100% 0)',duration:1,ease:'expo.inOut',onStart:intro,onComplete(){loader.remove();document.body.classList.remove('locked');lenis&&lenis.start();}},'-=.2');
+}
+
+/* ---------- cursor ---------- */
+const cur = $('.cursor');
+if(fine){
+  const xTo=gsap.quickTo(cur,'x',{duration:.35,ease:'power3'}), yTo=gsap.quickTo(cur,'y',{duration:.35,ease:'power3'});
+  addEventListener('mousemove',e=>{xTo(e.clientX);yTo(e.clientY)});
+  document.addEventListener('mouseover',e=>{
+    const c=e.target.closest('.card,.masonry figure,.next');
+    cur.classList.toggle('big',!!c);
+    cur.querySelector('span').textContent = c&&c.matches('.masonry figure')?'ZOOM':c&&c.matches('.next')?'NEXT':'VIEW';
+  });
+  // magnetic buttons
+  document.querySelectorAll('.magnetic').forEach(el=>{
+    el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();gsap.to(el,{x:(e.clientX-r.left-r.width/2)*.3,y:(e.clientY-r.top-r.height/2)*.4,duration:.5,ease:'power3'})});
+    el.addEventListener('mouseleave',()=>gsap.to(el,{x:0,y:0,duration:.8,ease:'elastic.out(1,.4)'}));
+  });
+  // portrait tilt
+  const pt=$('#portrait');
+  addEventListener('mousemove',e=>{
+    const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;
+    gsap.to(pt,{rotateY:x*10,rotateX:-y*10,duration:1,ease:'power3',transformPerspective:900});
+    gsap.to('.hero__glow b:nth-child(1)',{x:x*120,y:y*80,duration:2});
+    gsap.to('.hero__glow b:nth-child(2)',{x:-x*120,y:-y*80,duration:2});
+  });
+}
+
+/* ---------- scroll animations ---------- */
+if(!reduce){
+  // hero parallax out
+  gsap.to('#portrait img',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+  gsap.to('.hero h1',{yPercent:30,opacity:.2,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+
+  // marquee with scroll velocity
+  const marq=$('#marq'); let mx=0, dir=1, vel=0;
+  ScrollTrigger.create({onUpdate:s=>{dir=s.direction;vel=Math.min(Math.abs(s.getVelocity())/300,12)}});
+  gsap.ticker.add(()=>{ mx-=(1+vel)*dir; vel*=.92; const w=marq.scrollWidth/2; if(mx<=-w)mx+=w; if(mx>0)mx-=w; marq.style.transform=`translateX(${mx}px)`; });
+
+  // reveal
+  gsap.utils.toArray('.rv').forEach(el=>gsap.from(el,{y:60,opacity:0,duration:1.2,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 88%'}}));
+
+  // horizontal reel (desktop)
+  ScrollTrigger.matchMedia({
+    '(min-width:861px)':()=>{
+      const dist=()=>track.scrollWidth-innerWidth;
+      const tw=gsap.to(track,{x:()=>-dist(),ease:'none',scrollTrigger:{trigger:'#reel',start:'center center',end:()=>'+='+dist(),pin:true,scrub:1,invalidateOnRefresh:true,
+        onUpdate:s=>$('#reelBar').style.width=(s.progress*100)+'%'}});
+      gsap.utils.toArray('.card').forEach(c=>{
+        gsap.fromTo(c.querySelector('img'),{xPercent:-6},{xPercent:6,ease:'none',scrollTrigger:{trigger:c,containerAnimation:tw,start:'left right',end:'right left',scrub:true}});
+      });
+    },
+    '(max-width:860px)':()=>{
+      gsap.utils.toArray('.card').forEach(c=>gsap.from(c,{y:80,opacity:0,duration:1.2,ease:'expo.out',scrollTrigger:{trigger:c,start:'top 90%'}}));
+    }
+  });
+
+  // about word highlight
+  const at=$('#aboutText');
+  at.innerHTML=at.textContent.split(' ').map(w=>`<span class="w">${w}</span>`).join(' ');
+  const words=at.querySelectorAll('.w');
+  ScrollTrigger.create({trigger:at,start:'top 80%',end:'bottom 45%',scrub:true,onUpdate:s=>{const n=Math.round(s.progress*words.length);words.forEach((w,i)=>w.classList.toggle('on',i<n))}});
+
+  // contact big text
+  gsap.from('.contact__big span',{yPercent:100,opacity:0,stagger:.12,duration:1.4,ease:'expo.out',scrollTrigger:{trigger:'.contact',start:'top 70%'}});
+}else{
+  document.querySelectorAll('#aboutText').forEach(e=>e.style.opacity=1);
+}
+// tools level bars
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.4});
+document.querySelectorAll('.tool').forEach(t=>io.observe(t));
+
+/* ---------- copy phone ---------- */
+$('#copyPhone').addEventListener('click',async e=>{
+  const b=e.currentTarget;
+  try{await navigator.clipboard.writeText('+962788221616');b.textContent='Copied ✓';}
+  catch{const r=document.createRange();r.selectNodeContents(document.querySelector('.mail--phone a'));getSelection().removeAllRanges();getSelection().addRange(r);b.textContent='Selected';}
+  setTimeout(()=>b.textContent='Copy',1800);
+});
+/* ---------- copy email ---------- */
+$('#copyMail').addEventListener('click',async e=>{
+  const b=e.currentTarget;
+  try{await navigator.clipboard.writeText('emadmazen98@gmail.com');b.textContent='Copied ✓';}
+  catch{const r=document.createRange();r.selectNodeContents(document.querySelector('.mail a'));getSelection().removeAllRanges();getSelection().addRange(r);b.textContent='Selected';}
+  setTimeout(()=>b.textContent='Copy',1800);
+});
+
+/* ---------- project overlay ---------- */
+const proj=$('#proj'); let cur_i=0, open=false;
+function fill(i){
+  const p=PROJECTS[i]; cur_i=i;
+  $('#projIdx').textContent=`${pad(i+1)} / ${pad(PROJECTS.length)}`;
+  $('#projCat').textContent=`${p.cat} · ${p.year}`;
+  $('#projTitle').textContent=p.title;
+  $('#projDesc').textContent=p.desc;
+  $('#projStats').innerHTML=[
+    p.images.length&&`<div><b>${p.images.length}</b><span class="mono">Images</span></div>`,
+    p.videos.length&&`<div><b>${p.videos.length}</b><span class="mono">Videos</span></div>`,
+    `<div><b>${p.tools}</b><span class="mono">Tools</span></div>`].filter(Boolean).join('');
+  $('#projVids').innerHTML=p.videos.map(v=>`<div class="v"><iframe src="https://www-ccv.adobe.io/v1/player/ccv/${v}/embed?bgcolor=%230A0910&lazyLoading=true&api_key=BehancePro2View" loading="lazy" allow="fullscreen;autoplay" allowfullscreen title="${p.title} video"></iframe></div>`).join('');
+  $('#projGrid').innerHTML=p.images.map((s,k)=>`<figure data-k="${k}"><img src="${s}" alt="${p.title} — image ${k+1}" loading="lazy"></figure>`).join('');
+  $('#projNextT').textContent=PROJECTS[(i+1)%PROJECTS.length].title;
+  proj.scrollTop=0;
+  if(!reduce){
+    const figs=[...proj.querySelectorAll('.masonry figure,.videos .v')];
+    const fio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){gsap.fromTo(e.target,{y:60,opacity:0},{y:0,opacity:1,duration:1,ease:'expo.out'});fio.unobserve(e.target)}}),{root:proj,rootMargin:'0px 0px -5% 0px'});
+    figs.forEach(f=>{f.style.opacity=0;fio.observe(f)});
+    gsap.from('#projTitle,#projCat,#projDesc,#projStats',{y:50,opacity:0,stagger:.08,duration:1.1,ease:'expo.out',delay:.35});
+  }
+}
+function openProject(i){
+  fill(i); open=true;
+  document.body.classList.add('locked'); lenis&&lenis.stop();
+  gsap.set(proj,{visibility:'visible'});
+  gsap.fromTo(proj,{clipPath:'inset(100% 0 0 0)'},{clipPath:'inset(0% 0 0 0)',duration:reduce?0:1,ease:'expo.inOut'});
+  history.replaceState(null,'','#'+PROJECTS[i].slug);
+  $('#projClose').focus({preventScroll:true});
+}
+function closeProject(){
+  open=false;
+  gsap.to(proj,{clipPath:'inset(0 0 100% 0)',duration:reduce?0:.9,ease:'expo.inOut',onComplete(){gsap.set(proj,{visibility:'hidden'});$('#projVids').innerHTML='';}});
+  document.body.classList.remove('locked'); lenis&&lenis.start();
+  history.replaceState(null,'',location.pathname);
+}
+$('#projClose').addEventListener('click',closeProject);
+$('#projNext').addEventListener('click',()=>{
+  const n=(cur_i+1)%PROJECTS.length;
+  gsap.to(proj,{opacity:0,duration:reduce?0:.35,onComplete(){fill(n);history.replaceState(null,'','#'+PROJECTS[n].slug);gsap.to(proj,{opacity:1,duration:.35})}});
+});
+const deep=PROJECTS.findIndex(p=>'#'+p.slug===location.hash);
+if(deep>-1) setTimeout(()=>openProject(deep), reduce?0:3200);
+
+/* ---------- lightbox ---------- */
+const lb=$('#lb'); let li=0;
+function show(k){const imgs=PROJECTS[cur_i].images; li=(k+imgs.length)%imgs.length; $('#lbImg').src=imgs[li]; $('#lbC').textContent=`${pad(li+1)} / ${pad(imgs.length)}`; if(!reduce)gsap.fromTo('#lbImg',{scale:.94,opacity:0},{scale:1,opacity:1,duration:.5,ease:'expo.out'});}
+$('#projGrid').addEventListener('click',e=>{const f=e.target.closest('figure');if(!f)return;lb.hidden=false;show(+f.dataset.k);});
+$('#lbX').addEventListener('click',()=>lb.hidden=true);
+$('#lbP').addEventListener('click',()=>show(li-1));
+$('#lbN').addEventListener('click',()=>show(li+1));
+lb.addEventListener('click',e=>{if(e.target===lb)lb.hidden=true});
+addEventListener('keydown',e=>{
+  if(!lb.hidden){if(e.key==='Escape')lb.hidden=true;if(e.key==='ArrowRight')show(li+1);if(e.key==='ArrowLeft')show(li-1);return;}
+  if(open&&e.key==='Escape')closeProject();
+});
+addEventListener('load',()=>ScrollTrigger.refresh());
+</script>
+</body>
+</html>
